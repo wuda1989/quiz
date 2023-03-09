@@ -13,15 +13,6 @@ type CommentApi struct {
 
 var commentService = service.ServiceGroupApp.CommentService
 
-type CommentResp struct {
-	Uuid     string `json:"uuid"`
-	Parentid string `json:"parentid"`
-	Comment  string `json:"comment"`
-	Author   string `json:"author"`
-	Update   string `json:"update"`
-	Favorite bool   `json:"favorite"`
-}
-
 func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 	var params model.CommentReq
 	err := c.ShouldBindJSON(&params)
@@ -40,21 +31,12 @@ func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 		Favorite:      *params.Favorite,
 	}
 
-	if err := commentService.CreateComment(comment); err != nil {
-		response.FailWithMessage("create comment fail", c)
+	if err = commentService.CreateComment(comment); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	commentResp := CommentResp{
-		Uuid:     comment.Uuid,
-		Parentid: comment.Parentid,
-		Comment:  comment.Comment,
-		Author:   comment.Author,
-		Update:   comment.UpdateComment,
-		Favorite: comment.Favorite,
-	}
-
-	response.OkWithJson(commentResp, c)
+	response.OkWithJson(comment, c)
 }
 
 // FindComment 用UUID查詢
@@ -67,19 +49,10 @@ func (commentApi *CommentApi) FindComment(c *gin.Context) {
 	}
 
 	if recomment, err := commentService.GetComment(params.Uuid); err != nil {
-		response.FailWithMessage("查詢失敗", c)
+		response.FailWithMessage(err.Error(), c)
 		return
 	} else {
-		commentResp := CommentResp{
-			Uuid:     recomment.Uuid,
-			Parentid: recomment.Parentid,
-			Comment:  recomment.Comment,
-			Author:   recomment.Author,
-			Update:   recomment.UpdateComment,
-			Favorite: recomment.Favorite,
-		}
-
-		response.OkWithJson(commentResp, c)
+		response.OkWithJson(recomment, c)
 	}
 }
 
@@ -112,29 +85,22 @@ func (commentApi *CommentApi) UpdateComment(c *gin.Context) {
 		return
 	}
 
-	commentResp := CommentResp{
-		Uuid:     comment.Uuid,
-		Parentid: comment.Parentid,
-		Comment:  comment.Comment,
-		Author:   comment.Author,
-		Update:   comment.UpdateComment,
-		Favorite: comment.Favorite,
-	}
-
-	response.OkWithJson(commentResp, c)
+	response.OkWithJson(comment, c)
 
 }
 
 func (commentApi *CommentApi) DeleteComment(c *gin.Context) {
-	var comment model.Comment
-	err := c.ShouldBindJSON(&comment)
+	var paramsUri model.UuidCommentReq
+	err := c.ShouldBindUri(&paramsUri)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := commentService.DeleteComment(comment); err != nil {
-		response.FailWithMessage("刪除失敗", c)
-	} else {
-		response.OkWithMessage("刪除成功", c)
+
+	if err = commentService.DeleteComment(paramsUri.Uuid); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
 	}
+
+	response.OkWithMessage("刪除成功", c)
 }

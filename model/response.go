@@ -12,6 +12,15 @@ type Response struct {
 	Msg  string      `json:"msg"`
 }
 
+type CommentResp struct {
+	Uuid     string `json:"uuid"`
+	Parentid string `json:"parentid"`
+	Comment  string `json:"comment"`
+	Author   string `json:"author"`
+	Update   string `json:"update"`
+	Favorite bool   `json:"favorite"`
+}
+
 const (
 	ERROR   = 7
 	SUCCESS = 0
@@ -41,8 +50,16 @@ func OkWithMessage(message string, c *gin.Context) {
 	Result(SUCCESS, map[string]interface{}{}, message, c)
 }
 
-func OkWithJson(data interface{}, c *gin.Context) {
-	c.JSON(http.StatusOK, data)
+func OkWithJson(comment Comment, c *gin.Context) {
+	commentResp := CommentResp{
+		Uuid:     comment.Uuid,
+		Parentid: comment.Parentid,
+		Comment:  comment.Comment,
+		Author:   comment.Author,
+		Update:   comment.UpdateComment,
+		Favorite: comment.Favorite,
+	}
+	c.JSON(http.StatusOK, commentResp)
 }
 
 func OkWithData(data interface{}, c *gin.Context) {

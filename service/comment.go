@@ -15,9 +15,15 @@ func (commentService *CommentService) CreateComment(comment model.Comment) (err 
 	return err
 }
 
-// DeleteComment 刪除
-func (commentService *CommentService) DeleteComment(comment model.Comment) (err error) {
-	err = global.Global_DB.Delete(&comment).Error
+// DeleteComment 軟刪除
+func (commentService *CommentService) DeleteComment(uuid string) (err error) {
+	//db := global.Global_DB.Unscoped().Where("uuid=?", uuid).Delete(&model.Comment{}) // 永久刪除
+	db := global.Global_DB.Where("uuid=?", uuid).Delete(&model.Comment{}) // 軟刪除
+
+	if db.Error != nil || db.RowsAffected == 0 {
+		return errors.New("刪除失敗或資料未異動")
+	}
+
 	return err
 }
 
@@ -34,7 +40,7 @@ func (commentService *CommentService) UpdateComment(uuid string, comment model.C
 	})
 
 	if db.Error != nil || db.RowsAffected == 0 {
-		return errors.New("更新失敗")
+		return errors.New("更新失敗或資料未異動")
 	}
 
 	return err
