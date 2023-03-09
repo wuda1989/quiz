@@ -6,5 +6,5 @@ type CommentReq struct {
 	Comment  string `json:"comment" form:"comment" binding:"required"`
 	Author   string `json:"author" form:"author" binding:"required"`
 	Update   string `json:"update" form:"update" binding:"required"`
-	Favorite bool   `json:"favorite" form:"favorite" binding:"required"`
+	Favorite *bool  `json:"favorite" form:"favorite" binding:"required"`
 }

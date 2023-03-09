@@ -37,11 +37,12 @@ func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 		Parentid: params.Parentid,
 		Comment:  params.Comment,
 		Author:   params.Author,
-		Favorite: params.Favorite,
+		Favorite: *params.Favorite,
 	}
 
 	if err := commentService.CreateComment(comment); err != nil {
-		response.FailWithMessage("新增失敗", c)
+		response.FailWithMessage("create comment fail", c)
+		return
 	}
 
 	now := time.Now()
@@ -53,7 +54,8 @@ func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 		Update:   now.Format("2006-01-02T15:04:05Z"),
 		Favorite: comment.Favorite,
 	}
-	response.OkWithDetailed(commentResp, "新增成功", c)
+
+	response.OkWithJson(commentResp, c)
 }
 
 func (commentApi *CommentApi) DeleteComment(c *gin.Context) {

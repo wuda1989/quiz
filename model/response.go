@@ -41,6 +41,10 @@ func OkWithMessage(message string, c *gin.Context) {
 	Result(SUCCESS, map[string]interface{}{}, message, c)
 }
 
+func OkWithJson(data interface{}, c *gin.Context) {
+	c.JSON(http.StatusOK, data)
+}
+
 func OkWithData(data interface{}, c *gin.Context) {
 	Result(SUCCESS, data, "查詢成功", c)
 }
