@@ -6,7 +6,6 @@ import (
 	"quiz/model"
 	response "quiz/model"
 	"quiz/service"
-	"time"
 )
 
 type CommentApi struct {
@@ -33,11 +32,12 @@ func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 
 	newUUID := uuid.New().String()
 	comment := model.Comment{
-		Uuid:     newUUID,
-		Parentid: params.Parentid,
-		Comment:  params.Comment,
-		Author:   params.Author,
-		Favorite: *params.Favorite,
+		Uuid:          newUUID,
+		Parentid:      params.Parentid,
+		Comment:       params.Comment,
+		Author:        params.Author,
+		UpdateComment: params.Update,
+		Favorite:      *params.Favorite,
 	}
 
 	if err := commentService.CreateComment(comment); err != nil {
@@ -45,13 +45,12 @@ func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 		return
 	}
 
-	now := time.Now()
 	commentResp := CommentResp{
 		Uuid:     comment.Uuid,
 		Parentid: comment.Parentid,
 		Comment:  comment.Comment,
 		Author:   comment.Author,
-		Update:   now.Format("2006-01-02T15:04:05Z"),
+		Update:   comment.UpdateComment,
 		Favorite: comment.Favorite,
 	}
 
