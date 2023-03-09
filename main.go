@@ -7,13 +7,15 @@ import (
 )
 
 func main() {
+	//time.Sleep(20 * time.Second) // 等待mysql container 完成
+
 	global.Global_DB = initialize.Gorm()
 	if global.Global_DB != nil {
-		//initialize.RegisterTables(global.Global_DB) // 初始化資料表
-		//db, _ := global.Global_DB.DB()
-		//defer db.Close()
+		initialize.RegisterTables(global.Global_DB) // 初始化資料表
+		db, _ := global.Global_DB.DB()
+		defer db.Close()
 	} else {
-		fmt.Println("DB 初始化失敗")
+		fmt.Println("DB尚未初始化")
 		return
 	}
 

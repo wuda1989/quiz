@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
   
 services:
   server:
@@ -6,23 +6,25 @@ services:
       context: .
     container_name: go-server
     ports:
-      - 8888:8888
+      - "8888:8888"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy # 等mysql發訊號完成，才執行
     links:
       - mysql
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
   mysql:
     container_name: "my_mysql"
     image: mysql:5.7 # 指定版本
     ports: 
-        - 30820:3306
-    command: --init-file /data/application/init.sql
+        - "30820:3306"
+    command: --init-file /data/application/init.sql # 執行腳本，創建DB
     volumes: 
         # 將mysql資料存放在本機資料夾，container刪除後再重啟，資料不會消失
         - ./mysql:/var/lib/mysql
-        - ./init.sql:/data/application/init.sql
+        - ./init.sql:/data/application/init.sql # 複製腳本到container
     environment:
         # MYSQL 的密碼
         MYSQL_ROOT_PASSWORD: Qwer1234
@@ -30,6 +32,11 @@ services:
         TZ: Asia/Taipei
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    healthcheck: # 測試完成發訊號
+      test: "/usr/bin/mysql --user=root --password=Qwer1234 --execute \"SHOW DATABASES;\""
+      interval: 2s # 間隔兩秒
+      timeout: 20s
+      retries: 10 # 循環測試次數
 
   phpmyadmin:
     container_name: "my_phpmyadmin"
@@ -39,7 +46,7 @@ services:
         # PMA_HOST: my_mysql
         PMA_PASSWORD: Qwer1234
     ports: 
-        - 30830:80
+        - "30830:80"
     links:
         - "mysql:db"
     extra_hosts:

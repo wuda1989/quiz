@@ -8,13 +8,13 @@ import (
 	"quiz/model"
 )
 
-func Gorm() *gorm.DB {
-	username := "root"
-	password := "Qwer1234"
-	path := "host.docker.internal"
-	port := "30820"
-	dbname := "quiz"
+const username = "root"
+const password = "Qwer1234"
+const path = "host.docker.internal"
+const port = "30820"
+const dbname = "quiz"
 
+func Gorm() *gorm.DB {
 	dsn := username + ":" + password + "@tcp(" + path + ":" + port + ")/" + dbname + "?charset=utf8mb4&parseTime=True&loc=Local"
 	mysqlConfig := mysql.Config{
 		DSN:                       dsn,   // DSN data source name
