@@ -57,6 +57,31 @@ func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 	response.OkWithJson(commentResp, c)
 }
 
+// FindComment 用UUID查詢
+func (commentApi *CommentApi) FindComment(c *gin.Context) {
+	var params model.UuidCommentReq
+	err := c.ShouldBindUri(&params)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if recomment, err := commentService.GetComment(params.Uuid); err != nil {
+		response.FailWithMessage("查詢失敗", c)
+	} else {
+		commentResp := CommentResp{
+			Uuid:     recomment.Uuid,
+			Parentid: recomment.Parentid,
+			Comment:  recomment.Comment,
+			Author:   recomment.Author,
+			Update:   recomment.UpdateComment,
+			Favorite: recomment.Favorite,
+		}
+
+		response.OkWithJson(commentResp, c)
+	}
+}
+
 func (commentApi *CommentApi) DeleteComment(c *gin.Context) {
 	var comment model.Comment
 	err := c.ShouldBindJSON(&comment)
@@ -82,20 +107,5 @@ func (commentApi *CommentApi) UpdateComment(c *gin.Context) {
 		response.FailWithMessage("更新失敗", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
-	}
-}
-
-// FindComment 用UUID查詢
-func (commentApi *CommentApi) FindComment(c *gin.Context) {
-	var comment model.Comment
-	err := c.ShouldBindQuery(&comment)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	if recomment, err := commentService.GetComment(comment.ID); err != nil {
-		response.FailWithMessage("查詢失敗", c)
-	} else {
-		response.OkWithData(gin.H{"recomment": recomment}, c)
 	}
 }
