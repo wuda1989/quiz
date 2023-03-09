@@ -9,9 +9,9 @@ import (
 func main() {
 	global.Global_DB = initialize.Gorm()
 	if global.Global_DB != nil {
-		initialize.RegisterTables(global.Global_DB) // 初始化資料表
-		db, _ := global.Global_DB.DB()
-		defer db.Close()
+		//initialize.RegisterTables(global.Global_DB) // 初始化資料表
+		//db, _ := global.Global_DB.DB()
+		//defer db.Close()
 	} else {
 		fmt.Println("DB 初始化失敗")
 		return
