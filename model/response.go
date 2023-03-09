@@ -18,6 +18,14 @@ const (
 )
 
 func Result(code int, data interface{}, msg string, c *gin.Context) {
+	if code == ERROR {
+		c.JSON(http.StatusBadRequest, Response{
+			code,
+			data,
+			msg,
+		})
+		return
+	}
 	c.JSON(http.StatusOK, Response{
 		code,
 		data,

@@ -2,9 +2,11 @@ package quiz
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"quiz/model"
 	response "quiz/model"
 	"quiz/service"
+	"time"
 )
 
 type CommentApi struct {
@@ -12,18 +14,46 @@ type CommentApi struct {
 
 var commentService = service.ServiceGroupApp.CommentService
 
+type CommentResp struct {
+	Uuid     string `json:"uuid"`
+	Parentid string `json:"parentid"`
+	Comment  string `json:"comment"`
+	Author   string `json:"author"`
+	Update   string `json:"update"`
+	Favorite bool   `json:"favorite"`
+}
+
 func (commentApi *CommentApi) CreateComment(c *gin.Context) {
-	var comment model.Comment
-	err := c.ShouldBindJSON(&comment)
+	var params model.CommentReq
+	err := c.ShouldBindJSON(&params)
 	if err != nil {
-		response.FailWithMessage(err.Error(), c)
+		response.Fail(c)
 		return
 	}
+
+	newUUID := uuid.New().String()
+	comment := model.Comment{
+		Uuid:     newUUID,
+		Parentid: params.Parentid,
+		Comment:  params.Comment,
+		Author:   params.Author,
+		Favorite: params.Favorite,
+	}
+
 	if err := commentService.CreateComment(comment); err != nil {
 		response.FailWithMessage("新增失敗", c)
 	}
 
-	response.OkWithMessage("新增成功", c)
+	now := time.Now()
+	commentResp := CommentResp{
+		Uuid:     comment.Uuid,
+		Parentid: comment.Parentid,
+		Comment:  comment.Comment,
+		Author:   comment.Author,
+		Update:   now.Format("2006-01-02T15:04:05Z"),
+		Favorite: comment.Favorite,
+	}
+	response.OkWithDetailed(commentResp, "新增成功", c)
 }
 
 func (commentApi *CommentApi) DeleteComment(c *gin.Context) {

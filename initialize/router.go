@@ -12,7 +12,7 @@ func Routers() *gin.Engine {
 
 	PublicGroup := Router.Group("quiz")
 	{
-		// 健康监测
+		// 心跳
 		PublicGroup.GET("/health", func(c *gin.Context) {
 			c.JSON(http.StatusOK, "ok")
 		})

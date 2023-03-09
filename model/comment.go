@@ -9,7 +9,7 @@ type Comment struct {
 	Parentid string `json:"parentid" form:"parentid" gorm:"column:parentid;comment:parentID;size:191;"`
 	Comment  string `json:"comment" form:"comment" gorm:"column:comment;comment:內容;size:191;"`
 	Author   string `json:"author" form:"author" gorm:"column:author;comment:來源;size:191;"`
-	Favorite *bool  `json:"favorite" form:"favorite" gorm:"column:favorite;comment:最愛;"`
+	Favorite bool   `json:"favorite" form:"favorite" gorm:"column:favorite;comment:最愛;"`
 }
 
 // TableName Comment

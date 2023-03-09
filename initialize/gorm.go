@@ -13,11 +13,11 @@ func Gorm() *gorm.DB {
 	port := "30820"
 	dbname := "quiz"
 
-	m := username + ":" + password + "@tcp(" + path + ":" + port + ")/" + dbname + "?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := username + ":" + password + "@tcp(" + path + ":" + port + ")/" + dbname + "?charset=utf8mb4&parseTime=True&loc=Local"
 	mysqlConfig := mysql.Config{
-		DSN:                       m,     // DSN data source name
-		DefaultStringSize:         191,   // string 类型字段的默认长度
-		SkipInitializeWithVersion: false, // 根据版本自动配置
+		DSN:                       dsn,   // DSN data source name
+		DefaultStringSize:         191,   // string 字串預設長度
+		SkipInitializeWithVersion: false, // 根據當前 MySQL 版本自動配置
 
 	}
 
