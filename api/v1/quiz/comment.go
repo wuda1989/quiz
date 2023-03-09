@@ -26,7 +26,7 @@ func (commentApi *CommentApi) CreateComment(c *gin.Context) {
 	var params model.CommentReq
 	err := c.ShouldBindJSON(&params)
 	if err != nil {
-		response.Fail(c)
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
@@ -68,6 +68,7 @@ func (commentApi *CommentApi) FindComment(c *gin.Context) {
 
 	if recomment, err := commentService.GetComment(params.Uuid); err != nil {
 		response.FailWithMessage("查詢失敗", c)
+		return
 	} else {
 		commentResp := CommentResp{
 			Uuid:     recomment.Uuid,
@@ -82,6 +83,48 @@ func (commentApi *CommentApi) FindComment(c *gin.Context) {
 	}
 }
 
+func (commentApi *CommentApi) UpdateComment(c *gin.Context) {
+	var paramsUri model.UuidCommentReq
+	err := c.ShouldBindUri(&paramsUri)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	var params model.UpdateCommentReq
+	err = c.ShouldBindJSON(&params)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	comment := model.Comment{
+		Uuid:          params.Uuid,
+		Parentid:      params.Parentid,
+		Comment:       params.Comment,
+		Author:        params.Author,
+		UpdateComment: params.Update,
+		Favorite:      *params.Favorite,
+	}
+
+	if err = commentService.UpdateComment(paramsUri.Uuid, comment); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	commentResp := CommentResp{
+		Uuid:     comment.Uuid,
+		Parentid: comment.Parentid,
+		Comment:  comment.Comment,
+		Author:   comment.Author,
+		Update:   comment.UpdateComment,
+		Favorite: comment.Favorite,
+	}
+
+	response.OkWithJson(commentResp, c)
+
+}
+
 func (commentApi *CommentApi) DeleteComment(c *gin.Context) {
 	var comment model.Comment
 	err := c.ShouldBindJSON(&comment)
@@ -93,19 +136,5 @@ func (commentApi *CommentApi) DeleteComment(c *gin.Context) {
 		response.FailWithMessage("刪除失敗", c)
 	} else {
 		response.OkWithMessage("刪除成功", c)
-	}
-}
-
-func (commentApi *CommentApi) UpdateComment(c *gin.Context) {
-	var comment model.Comment
-	err := c.ShouldBindJSON(&comment)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	if err := commentService.UpdateComment(comment); err != nil {
-		response.FailWithMessage("更新失敗", c)
-	} else {
-		response.OkWithMessage("更新成功", c)
 	}
 }

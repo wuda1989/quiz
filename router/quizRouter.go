@@ -14,7 +14,7 @@ func (s *QuizRouter) InitQuizRouter(Router *gin.RouterGroup) {
 	{
 		quizRouter.POST("comment", commentApi.CreateComment)
 		quizRouter.GET("comment/:uuid", commentApi.FindComment)
-		quizRouter.PUT("comment", commentApi.UpdateComment)
-		quizRouter.DELETE("comment", commentApi.DeleteComment)
+		quizRouter.PUT("comment/:uuid", commentApi.UpdateComment)
+		quizRouter.DELETE("comment/:uuid", commentApi.DeleteComment)
 	}
 }
