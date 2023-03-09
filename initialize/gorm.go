@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"os"
+	"quiz/model"
 )
 
 func Gorm() *gorm.DB {
 	username := "root"
 	password := "Qwer1234"
-	path := "192.168.1.153"
+	path := "host.docker.internal"
 	port := "30820"
 	dbname := "quiz"
 
@@ -26,5 +28,15 @@ func Gorm() *gorm.DB {
 	} else {
 		fmt.Println("********** MySQL Done! **********")
 		return db
+	}
+}
+
+func RegisterTables(db *gorm.DB) {
+	err := db.AutoMigrate(
+		model.Comment{},
+	)
+	if err != nil {
+		fmt.Println("********** DB Error ! **********")
+		os.Exit(0)
 	}
 }
