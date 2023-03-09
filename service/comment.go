@@ -27,7 +27,7 @@ func (commentService *CommentService) UpdateComment(comment model.Comment) (err 
 }
 
 // GetComment 獲取
-func (commentService *CommentService) GetComment(uuid uint) (comment model.Comment, err error) {
+func (commentService *CommentService) GetComment(uuid string) (comment model.Comment, err error) {
 	err = global.Global_DB.Where("uuid = ?", uuid).First(&comment).Error
 	return
 }

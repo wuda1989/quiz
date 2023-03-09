@@ -13,7 +13,7 @@ func (s *QuizRouter) InitQuizRouter(Router *gin.RouterGroup) {
 	var commentApi = v1.ApiGroupApp.CommentApi
 	{
 		quizRouter.POST("comment", commentApi.CreateComment)
-		quizRouter.GET("comment", commentApi.FindComment)
+		quizRouter.GET("comment/:uuid", commentApi.FindComment)
 		quizRouter.PUT("comment", commentApi.UpdateComment)
 		quizRouter.DELETE("comment", commentApi.DeleteComment)
 	}
