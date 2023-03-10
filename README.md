@@ -1,9 +1,11 @@
 
-# quiz 測驗
+# quiz 1 測驗
 
 <img src="https://img.shields.io/badge/golang-1.19.3-blue" alt=""/>
 <img src="https://img.shields.io/badge/gin-1.9.0-lightBlue" alt=""/>
 <img src="https://img.shields.io/badge/gorm-1.24.6-red" alt=""/>
+
+[quiz 2 測驗](https://github.com/wuda1989/quiz2)
 
 ## 1. Run docker-compose
 
