@@ -14,6 +14,7 @@ cd quiz
 # 執行
 docker-compose up -d server mysql
 ```
+*本專案會自動建立DB以及Table，完成後會在運行Go
 
 ## 2. Comment API
 ### create a new comment.
