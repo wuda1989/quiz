@@ -1,4 +1,4 @@
-image: golang:latest
+image: golang:alpine
 
 variables:
   ARTIFACTS_DIR: artifacts
