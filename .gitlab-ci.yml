@@ -11,6 +11,13 @@ before_script:
 
 stages:
   - build
+  - test
+
+gotest:
+  stage: test
+  script:
+    - go test ./...
+
 
 gobuild:
   stage: build
