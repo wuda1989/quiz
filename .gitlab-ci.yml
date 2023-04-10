@@ -15,7 +15,7 @@ stages:
 gobuild:
   stage: build
   script:
-    - go build -o ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}/main
+    - go build -o server .
   artifacts:
     paths:
       - ${ARTIFACTS_DIR}
