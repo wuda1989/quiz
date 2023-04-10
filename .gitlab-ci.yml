@@ -1,0 +1,22 @@
+image: golang:alpine
+
+variables:
+  ARTIFACTS_DIR: artifacts
+  GO_PROJECT: gitlab.com/username/projectname
+
+before_script:
+  - go version
+  - export GO111MODULE=on
+  - mkdir -p ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}
+
+stages:
+  - build
+
+gobuild:
+  stage: build
+  script:
+    - go build -o  ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}/main
+  artifacts:
+    paths:
+      - ${ARTIFACTS_DIR}
+    expire_in: 1h
