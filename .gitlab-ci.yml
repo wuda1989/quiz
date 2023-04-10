@@ -1,13 +1,16 @@
 image: golang:alpine
 
-#variables:
-#  ARTIFACTS_DIR: artifacts
+variables:
+  ARTIFACTS_DIR: artifacts
 #  GO_PROJECT: gitlab.com/username/projectname
-#
-#before_script:
-#  - go version
-#  - export GO111MODULE=on
-#  - mkdir -p ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}
+
+before_script:
+  - go version
+  - mkdir -p ${CI_PROJECT_DIR}/${ARTIFACTS_DIR}
+  - go env -w GO111MODULE=on
+  - go env -w CGO_ENABLED=0
+  - go env
+  - go mod tidy
 
 stages:
   - build
@@ -15,8 +18,8 @@ stages:
 gobuild:
   stage: build
   script:
-    - go build -o server .
+    - go build -o .
   artifacts:
-    paths:
-      - ${ARTIFACTS_DIR}
+#    paths:
+#      - ${ARTIFACTS_DIR}
     expire_in: 1h
