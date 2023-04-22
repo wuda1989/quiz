@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"quiz/global"
 	"quiz/initialize"
@@ -13,7 +14,13 @@ func main() {
 	if global.Global_DB != nil {
 		initialize.RegisterTables(global.Global_DB) // 初始化資料表
 		db, _ := global.Global_DB.DB()
-		defer db.Close()
+		defer func(db *sql.DB) {
+			err := db.Close()
+			if err != nil {
+				fmt.Println("DB尚未初始化")
+				return
+			}
+		}(db)
 	} else {
 		fmt.Println("DB尚未初始化")
 		return
