@@ -18,6 +18,7 @@ services:
   mysql:
     container_name: "my_mysql"
     image: mysql:5.7 # 指定版本
+#    platform: linux/amd64 # macOS ARM64在使用
     ports: 
         - "30820:3306"
     command: --init-file /data/application/init.sql # 執行腳本，創建DB

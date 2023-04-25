@@ -1,5 +1,5 @@
 
-# 快速架起 RESTful API 範例
+# 快速架起 Docker Go RESTful API 範例
 
 <img src="https://img.shields.io/badge/golang-1.19.3-blue" alt=""/>
 <img src="https://img.shields.io/badge/gin-1.9.0-lightBlue" alt=""/>
@@ -7,14 +7,17 @@
 
 ## 1. Run docker-compose
 
+* 本專案會自動建立DB以及Table，完成後會在運行Go
+* Apple Silicon 晶片請至 docker-compose 將mysql的 #platform: linux/amd64 註解拿掉
+* DB預設是空的，請先呼叫API去新增
+
 ```
 # 進入 quiz 資料夾
 cd quiz
 
 # 執行
-docker-compose up -d server mysql
+docker-compose up -d server mysql phpmyadmin
 ```
-*本專案會自動建立DB以及Table，完成後會在運行Go
 
 ## 2. Comment API
 ### create a new comment.
