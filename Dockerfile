@@ -11,7 +11,7 @@ RUN go env -w GO111MODULE=on \
 
 FROM alpine:latest
 
-LABEL MAINTAINER="wuda@wuda.com"
+LABEL MAINTAINER="wuda@example.com"
 
 WORKDIR /go/src/server
 

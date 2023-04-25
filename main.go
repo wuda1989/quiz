@@ -8,8 +8,6 @@ import (
 )
 
 func main() {
-	//time.Sleep(20 * time.Second) // 等待mysql container 完成
-
 	global.Global_DB = initialize.Gorm()
 	if global.Global_DB != nil {
 		initialize.RegisterTables(global.Global_DB) // 初始化資料表
